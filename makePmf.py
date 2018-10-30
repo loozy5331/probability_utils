@@ -47,13 +47,14 @@ for count, file_set in enumerate(file_list):
             file = pd.read_csv(path, header=None)
         except(Exception):
             # 흑백이나 깨진 이미지
+            # 예외 파일들.
             continue
         row = len(file)            # 행 길이
         col = len(file.iloc[0])    # 열 길이
-        # 각 행마다 sex의 값이 1인지 확인.
+        # 각 행마다 Skin 값이 1인지 확인.
         for i in range(row):
-            sex = file.iloc[i, -1]
-            if (sex == 1):  # 이거 확인
+            Skin = file.iloc[i, -1]
+            if (Skin == 1):  #
                 SkinBdict[file.iloc[i, 0]] += 1
                 SkinGdict[file.iloc[i, 1]] += 1
                 SkinRdict[file.iloc[i, 2]] += 1
@@ -76,7 +77,7 @@ for count, file_set in enumerate(file_list):
     sumOfNSkin_R = sum(NonSkinRdict.values())
     
     for i in range(0, 256):
-
+        # 각각의 색상별로 pmf를 구함. p(B|Skin) ...
         Skin_B_pmf.append(str(SkinBdict[i] / sumOfSkin_B))
         Skin_G_pmf.append(str(SkinGdict[i] / sumOfSkin_G))
         Skin_R_pmf.append(str(SkinRdict[i] / sumOfSkin_R))
@@ -84,6 +85,7 @@ for count, file_set in enumerate(file_list):
         NonS_G_pmf.append(str(NonSkinGdict[i] / sumOfNSkin_G))
         NonS_R_pmf.append(str(NonSkinRdict[i] / sumOfNSkin_R))
 
+    # 각 집합마다 파일을 따로 저장.
     with open(r"pmf_set\Skin_BGR_{}_pmf.csv".format(count), 'w') as f:
         f.write(",".join(Skin_B_pmf) + "\n")
         f.write(",".join(Skin_G_pmf) + "\n")

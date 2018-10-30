@@ -16,10 +16,10 @@ with open("total_info.json", "r") as file:
 
 #이미지를 불러와서 타원의 마스크를 씌우고 그 부분에 라벨링.
 def bringAndMaskingImg(path):
-    #얼마나 진행되었는지 확인용
     count = 0
     total_count = len(total_ellip_info.keys())
     for path, ellips in total_ellip_info.items():
+        # 얼마나 진행되었는지 확인용
         count += 1;
         if (count % (total_count // 10) == 0):
             print("{}%".format(round((count / total_count) * 100)))
@@ -49,7 +49,7 @@ def bringAndMaskingImg(path):
                         for n in col:
                             tmp_str += str(n) + ","
                         if(mcol[0] == 113 and mcol[1] == 146 and mcol[2] == 203):
-                            label = "1"     #Skin
+                            label = "1"     # Skin
                         tmp_str += label
                         tmp_str += "\n"
                         f.write(tmp_str)
@@ -69,6 +69,7 @@ def removeExceptionFile(path):
             os.remove(file)
             print(file)
 
+# csv 파일 전부 삭제.
 def removeAllcsvFile(path):
     total_path = total_ellip_info.keys()
     for loc_path in total_path:
