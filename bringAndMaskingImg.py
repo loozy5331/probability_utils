@@ -37,6 +37,7 @@ def bringAndMaskingImg(path):
         # el[5] = detection_score
         for el in ellips:
             # cv2.ellipse(img, center, axes, angel, startAngle, endAngle, color, thickness)
+            # 피부색으로 masking
             cv2.ellipse(img, (int(el[3]), int(el[4])), (int(el[1]), int(el[0])), int(el[2]), 0, 360, (113, 146, 203), -1)
         # 이미지의 원래 이름 + .csv
         with open(os.path.join(originPics_path, path) + ".csv", 'w') as f:
@@ -47,7 +48,10 @@ def bringAndMaskingImg(path):
                         label = "2"     # Non-Skin
                         for n in col:
                             tmp_str += str(n) + ","
-                        if(mcol[0] == 113 and mcol[1] == 146 and mcol[2] == 203):
+                        # Masking 된 부분.
+                        # Masking 된 부분중에서 원래 색이 검정색(0, 0, 0)인 부분은 제외.
+                        if((mcol[0] == 113 and mcol[1] == 146 and mcol[2] == 203)
+                                and (col[0] != 0 and col[1] != 0 and col[2] != 0)):
                             label = "1"     # Skin
                         tmp_str += label
                         tmp_str += "\n"

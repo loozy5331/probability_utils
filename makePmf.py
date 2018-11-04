@@ -25,8 +25,8 @@ for i in range(5):
 
 for count, file_set in enumerate(file_list):
     # 이미 있으면 패스!
-    if os.path.isfile(os.path.join("pmf_set", r"Skin_BGR_{}_pmf.csv".format(count))):
-        print(r"pmf_set\Skin_BGR_{}_pmf.csv".format(count) + "는 이미 있습니다!")
+    if os.path.isfile(os.path.join("pmf_set", r"Skin_BGR_{}_pmf.csv".format(count + 1))):
+        print(r"pmf_set\Skin_BGR_{}_pmf.csv".format(count + 1) + "는 이미 있습니다!")
         continue
     print("{}번째 set 생성 중".format(count + 1))
     # 각각의 BGR 값이 몇번씩 나왔는지 체크
