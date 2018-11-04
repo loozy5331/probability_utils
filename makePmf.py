@@ -54,7 +54,7 @@ for count, file_set in enumerate(file_list):
         # 각 행마다 Skin 값이 1인지 확인.
         for i in range(row):
             Skin = file.iloc[i, -1]
-            if (Skin == 1):  #
+            if (Skin == 1):  # 피부!
                 SkinBdict[file.iloc[i, 0]] += 1
                 SkinGdict[file.iloc[i, 1]] += 1
                 SkinRdict[file.iloc[i, 2]] += 1
@@ -68,22 +68,15 @@ for count, file_set in enumerate(file_list):
     NonS_B_pmf = list()
     NonS_G_pmf = list()
     NonS_R_pmf = list()
-
-    sumOfSkin_B = sum(SkinBdict.values())
-    sumOfSkin_G = sum(SkinGdict.values())
-    sumOfSkin_R = sum(SkinRdict.values())
-    sumOfNSkin_B = sum(NonSkinBdict.values())
-    sumOfNSkin_G = sum(NonSkinGdict.values())
-    sumOfNSkin_R = sum(NonSkinRdict.values())
     
     for i in range(0, 256):
         # 각각의 색상별로 pmf를 구함. p(B|Skin) ...
-        Skin_B_pmf.append(str(SkinBdict[i] / sumOfSkin_B))
-        Skin_G_pmf.append(str(SkinGdict[i] / sumOfSkin_G))
-        Skin_R_pmf.append(str(SkinRdict[i] / sumOfSkin_R))
-        NonS_B_pmf.append(str(NonSkinBdict[i] / sumOfNSkin_B))
-        NonS_G_pmf.append(str(NonSkinGdict[i] / sumOfNSkin_G))
-        NonS_R_pmf.append(str(NonSkinRdict[i] / sumOfNSkin_R))
+        Skin_B_pmf.append(str(SkinBdict[i] / sum(SkinBdict.values())))
+        Skin_G_pmf.append(str(SkinGdict[i] / sum(SkinGdict.values())))
+        Skin_R_pmf.append(str(SkinRdict[i] / sum(SkinRdict.values())))
+        NonS_B_pmf.append(str(NonSkinBdict[i] / sum(NonSkinBdict.values())))
+        NonS_G_pmf.append(str(NonSkinGdict[i] / sum(NonSkinGdict.values())))
+        NonS_R_pmf.append(str(NonSkinRdict[i] / sum(NonSkinRdict.values())))
 
     # 각 집합마다 파일을 따로 저장.
     with open(r"pmf_set\Skin_BGR_{}_pmf.csv".format(count), 'w') as f:

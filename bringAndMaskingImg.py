@@ -2,7 +2,6 @@ import cv2
 import json
 import os
 import pandas as pd
-import matplotlib.pyplot as plt
 
 # 이미지가 저장된 폴더 path
 os.chdir(r"C:\Users\time8\Desktop\program\2018.10")
