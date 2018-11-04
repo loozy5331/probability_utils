@@ -84,11 +84,11 @@ for count, file_set in enumerate(file_list):
         NonS_R_pmf.append(str(NonSkinRdict[i] / sum(NonSkinRdict.values())))
 
     # 각 집합마다 파일을 따로 저장.
-    with open(r"pmf_set\Skin_BGR_{}_pmf.csv".format(count), 'w') as f:
+    with open(r"pmf_set\Skin_BGR_{}_pmf.csv".format(count + 1), 'w') as f:
         f.write(",".join(Skin_B_pmf) + "\n")
         f.write(",".join(Skin_G_pmf) + "\n")
         f.write(",".join(Skin_R_pmf))
-    with open(r"pmf_set\NonS_BGR_{}_pmf.csv".format(count), 'w') as f:
+    with open(r"pmf_set\NonS_BGR_{}_pmf.csv".format(count + 1), 'w') as f:
         f.write(",".join(NonS_B_pmf) + "\n")
         f.write(",".join(NonS_G_pmf) + "\n")
         f.write(",".join(NonS_R_pmf))
