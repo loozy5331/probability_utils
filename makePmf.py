@@ -24,6 +24,10 @@ for i in range(5):
     file_list.append(masked_file_list[each_file_len*i:each_file_len*(i+1)])
 
 for count, file_set in enumerate(file_list):
+    # 이미 있으면 패스!
+    if os.path.isfile(os.path.join("pmf_set", r"Skin_BGR_{}_pmf.csv".format(count))):
+        print(r"pmf_set\Skin_BGR_{}_pmf.csv".format(count) + "는 이미 있습니다!")
+        continue
     print("{}번째 set 생성 중".format(count + 1))
     # 각각의 BGR 값이 몇번씩 나왔는지 체크
     SkinBdict = dict()
@@ -62,6 +66,7 @@ for count, file_set in enumerate(file_list):
                 NonSkinBdict[file.iloc[i, 0]] += 1
                 NonSkinGdict[file.iloc[i, 1]] += 1
                 NonSkinRdict[file.iloc[i, 2]] += 1
+
     Skin_B_pmf = list()
     Skin_G_pmf = list()
     Skin_R_pmf = list()
