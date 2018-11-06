@@ -75,13 +75,13 @@ for count, file_set in enumerate(file_list):
     NonS_R_pmf = list()
     
     for i in range(0, 256):
-        # 각각의 색상별로 pmf를 구함. p(B|Skin) ...
-        Skin_B_pmf.append(str(SkinBdict[i] / sum(SkinBdict.values())))
-        Skin_G_pmf.append(str(SkinGdict[i] / sum(SkinGdict.values())))
-        Skin_R_pmf.append(str(SkinRdict[i] / sum(SkinRdict.values())))
-        NonS_B_pmf.append(str(NonSkinBdict[i] / sum(NonSkinBdict.values())))
-        NonS_G_pmf.append(str(NonSkinGdict[i] / sum(NonSkinGdict.values())))
-        NonS_R_pmf.append(str(NonSkinRdict[i] / sum(NonSkinRdict.values())))
+        # 각각의 색상별로 데이터 갯수를 구함. p(B|Skin) ...
+        Skin_B_pmf.append(str(SkinBdict[i]))
+        Skin_G_pmf.append(str(SkinGdict[i]))
+        Skin_R_pmf.append(str(SkinRdict[i]))
+        NonS_B_pmf.append(str(NonSkinBdict[i]))
+        NonS_G_pmf.append(str(NonSkinGdict[i]))
+        NonS_R_pmf.append(str(NonSkinRdict[i]))
 
     # 각 집합마다 파일을 따로 저장.
     with open(r"pmf_set\Skin_BGR_{}_pmf.csv".format(count + 1), 'w') as f:
