@@ -210,7 +210,7 @@ def Test_Gaussian_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, c
     precision = TP / (TP + FP)
     recall = TP / (TP + FN)
     temp = str(precision) + ", " + str(recall)
-    with open(r"Evaluate_data\precision_recall_set_{}.csv".format(count + 1)) as f:
+    with open(r"Evaluate_data\Gaussian_precision_recall_set_{}.csv".format(count + 1)) as f:
         f.write(temp)
 
 if __name__ == "__main__":
