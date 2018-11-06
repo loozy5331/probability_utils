@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import os
 import json
 from multiprocessing import Pool
@@ -28,7 +29,6 @@ def make_pmf(freq):
     freq.iloc[1, :] = [g / sum(freq.iloc[1, :]) for g in freq.iloc[1, :]]
     freq.iloc[2, :] = [r / sum(freq.iloc[2, :]) for r in freq.iloc[2, :]]
     return freq
-
 
 def Test_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood, count):
     PRIOR = 0.5
@@ -63,7 +63,6 @@ def Test_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood, count):
             # Nonskin 이고, 실제로 skin
             else:
                 FN += 1
-
     precision = TP / (TP + FP)
     recall = TP / (TP + FN)
     temp = str(precision) + ", " + str(recall)
@@ -115,6 +114,104 @@ def Test_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, count):
     with open(r"Evaluate_data\precision_recall_set_{}.csv".format(count + 1)) as f:
         f.write(temp)
 
+def gaussian_distribution(x):
+    var = np.var(x)
+    mean = np.mean(x)
+    y = (1 / (np.sqrt(2 * np.pi * var))*np.exp(-(x-mean)**2/(2*var)))
+    return y
+
+def Test_Gaussian_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood, count):
+    PRIOR = 0.5
+    TP = 0
+    TN = 0
+    FP = 0
+    FN = 0
+    skin_R = skin_likelihood.iloc[2, :]
+    skin_R = gaussian_distribution(skin_R)
+    NonSkin_R = NonSkin_likelihood.iloc[2, :]
+    NonSkin_R = gaussian_distribution(NonSkin_R)
+    print(count)
+    for path in file_set:
+        try:
+            file = pd.read_csv(path, header=None)
+        except(Exception):
+            continue
+        row = len(file)  # 행 길이
+        print(TP, TN, FP, FN)
+        for i in range(row):
+            real_val = file.iloc[i, -1]
+            R = file.iloc[i, 2]
+            skin_posterior = skin_R[R] * PRIOR
+            Nonskin_posterior = NonSkin_R[R] * (1 - PRIOR)
+
+            # skin 이고, 실제로 skin
+            if ((skin_posterior > Nonskin_posterior) and real_val == 1):
+                TP += 1
+            # Nonskin 이고, 실제로 Nonskin
+            elif ((skin_posterior < Nonskin_posterior) and real_val != 1):
+                TN += 1
+            # skin 이고, 실제론 Nonskin
+            elif ((skin_posterior > Nonskin_posterior) and real_val != 1):
+                FP += 1
+            # Nonskin 이고, 실제로 skin
+            else:
+                FN += 1
+    precision = TP / (TP + FP)
+    recall = TP / (TP + FN)
+    temp = str(precision) + ", " + str(recall)
+    with open(r"Evaluate_data\Gaussian_precision_recall_set_{}_R.csv".format(count + 1)) as f:
+        f.write(temp)
+
+def Test_Gaussian_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, count):
+    PRIOR = 0.5
+    TP = 0
+    TN = 0
+    FP = 0
+    FN = 0
+    skin_B = skin_likelihood.iloc[0, :]
+    skin_B = gaussian_distribution(skin_B)
+    skin_G = skin_likelihood.iloc[1, :]
+    skin_G = gaussian_distribution(skin_G)
+    skin_R = skin_likelihood.iloc[2, :]
+    skin_R = gaussian_distribution(skin_R)
+
+    NonSkin_B = NonSkin_likelihood.iloc[0, :]
+    NonSkin_B = gaussian_distribution(NonSkin_B)
+    NonSkin_G = NonSkin_likelihood.iloc[1, :]
+    NonSkin_G = gaussian_distribution(NonSkin_G)
+    NonSkin_R = NonSkin_likelihood.iloc[2, :]
+    NonSkin_R = gaussian_distribution(NonSkin_R)
+    print(count)
+    for path in file_set:
+        try:
+            file = pd.read_csv(path, header=None)
+        except(Exception):
+            continue
+        row = len(file)  # 행 길이
+        for i in range(row):
+            real_val = file.iloc[i, -1]
+            B = file.iloc[i, 0]
+            G = file.iloc[i, 1]
+            R = file.iloc[i, 2]
+            skin_posterior = (skin_B[B] * skin_G[G] * skin_R[R]) * PRIOR
+            Nonskin_posterior = (NonSkin_B[B] * NonSkin_G[G] * NonSkin_R[R]) * (1 - PRIOR)
+            # skin 이고, 실제로 skin
+            if ((skin_posterior > Nonskin_posterior) and real_val == 1):
+                TP += 1
+            # Nonskin 이고, 실제로 Nonskin
+            elif ((skin_posterior < Nonskin_posterior) and real_val != 1):
+                TN += 1
+            # skin 이고, 실제론 Nonskin
+            elif ((skin_posterior > Nonskin_posterior) and real_val != 1):
+                FP += 1
+            # Nonskin 이고, 실제로 skin
+            else:
+                FN += 1
+    precision = TP / (TP + FP)
+    recall = TP / (TP + FN)
+    temp = str(precision) + ", " + str(recall)
+    with open(r"Evaluate_data\precision_recall_set_{}.csv".format(count + 1)) as f:
+        f.write(temp)
 
 if __name__ == "__main__":
     prior = 0.4
@@ -137,12 +234,17 @@ if __name__ == "__main__":
 
     count_list = list(range(5))
     # R로만 precision, recall을 구함.
-    #with Pool(12) as p:
-    #    p.starmap(Test_SkinOrNonSkin_R, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
+    with Pool(12) as p:
+        p.starmap(Test_SkinOrNonSkin_R, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
 
     # BGR로 precision, recall을 구함.
     with Pool(12) as p:
         p.starmap(Test_SkinOrNonSkin, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
 
+    # R만 Guassian fitting 후에 precision, recall을 구함.
+    with Pool(12) as p:
+        p.starmap(Test_Gaussian_SkinOrNonSkin_R, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
 
-
+    # BGR을 Guassin fitting 후에 precision, recall을 구함.
+    with Pool(12) as p:
+        p.starmap(Test_Gaussian_SkinOrNonSkin, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
