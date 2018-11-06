@@ -98,6 +98,7 @@ def makeFrequancy(file_set, count):
 
 
 if __name__ == "__main__":
+    # 분산 작업을 위해!
     count_list = [0, 1, 2, 3, 4]
     with Pool(8) as p:
         p.starmap(makeFrequancy, zip(file_list, count_list))
