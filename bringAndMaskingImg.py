@@ -2,6 +2,7 @@ import cv2
 import json
 import os
 import pandas as pd
+from multiprocessing import Pool
 
 # 이미지가 저장된 폴더 path
 os.chdir(r"C:\Users\time8\Desktop\program\2018.10")
@@ -51,7 +52,7 @@ def bringAndMaskingImg(path):
                         # Masking 된 부분.
                         # Masking 된 부분중에서 원래 색이 검정색(0, 0, 0)인 부분은 제외.
                         if((mcol[0] == 113 and mcol[1] == 146 and mcol[2] == 203)
-                                and (col[0] != 0 and col[1] != 0 and col[2] != 0)):
+                                and not (col[0] == 0 and col[1] == 0 and col[2] == 0)):
                             label = "1"     # Skin
                         tmp_str += label
                         tmp_str += "\n"
@@ -106,7 +107,7 @@ def guess_Skin_tone():
 
 
 if __name__ == "__main__":
-    print(guess_Skin_tone())
+    #print(guess_Skin_tone())
     bringAndMaskingImg(originPics_path)
     removeExceptionFile(originPics_path)# 예외 파일 삭제
 

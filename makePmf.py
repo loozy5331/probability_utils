@@ -1,11 +1,11 @@
 import json
 import os
+from multiprocessing import Pool
 import pandas as pd
 
 os.chdir(r"C:\Users\time8\Desktop\program\2018.10")
 cur_path = os.getcwd()
 originPics_path = os.path.join(cur_path, "originalPics")
-
 # total_info.json file
 total_ellip_info = dict()   # total_info.json 불러오기
 with open("total_info.json", "r") as file:
@@ -23,12 +23,15 @@ file_list = []
 for i in range(5):
     file_list.append(masked_file_list[each_file_len*i:each_file_len*(i+1)])
 
-for count, file_set in enumerate(file_list):
+def makeFrequancy(file_set, count):
+    # for count, file_set in enumerate(file_list):
     # 이미 있으면 패스!
-    if os.path.isfile(os.path.join("pmf_set", r"Skin_BGR_{}_pmf.csv".format(count + 1))):
-        print(r"pmf_set\Skin_BGR_{}_pmf.csv".format(count + 1) + "는 이미 있습니다!")
-        continue
+    if os.path.isfile(os.path.join("pmf_set", r"Skin_BGR_{}_freq.csv".format(count + 1))):
+        print(r"freq_set\Skin_BGR_{}_freq.csv".format(count + 1) + "는 이미 있습니다!")
+        return
+
     print("{}번째 set 생성 중".format(count + 1))
+
     # 각각의 BGR 값이 몇번씩 나왔는지 체크
     SkinBdict = dict()
     SkinGdict = dict()
@@ -67,33 +70,37 @@ for count, file_set in enumerate(file_list):
                 NonSkinGdict[file.iloc[i, 1]] += 1
                 NonSkinRdict[file.iloc[i, 2]] += 1
 
-    Skin_B_pmf = list()
-    Skin_G_pmf = list()
-    Skin_R_pmf = list()
-    NonS_B_pmf = list()
-    NonS_G_pmf = list()
-    NonS_R_pmf = list()
+    Skin_B_freq = list()
+    Skin_G_freq = list()
+    Skin_R_freq = list()
+    NonS_B_freq = list()
+    NonS_G_freq = list()
+    NonS_R_freq = list()
     
     for i in range(0, 256):
         # 각각의 색상별로 데이터 갯수를 구함. p(B|Skin) ...
-        Skin_B_pmf.append(str(SkinBdict[i]))
-        Skin_G_pmf.append(str(SkinGdict[i]))
-        Skin_R_pmf.append(str(SkinRdict[i]))
-        NonS_B_pmf.append(str(NonSkinBdict[i]))
-        NonS_G_pmf.append(str(NonSkinGdict[i]))
-        NonS_R_pmf.append(str(NonSkinRdict[i]))
+        Skin_B_freq.append(str(SkinBdict[i]))
+        Skin_G_freq.append(str(SkinGdict[i]))
+        Skin_R_freq.append(str(SkinRdict[i]))
+        NonS_B_freq.append(str(NonSkinBdict[i]))
+        NonS_G_freq.append(str(NonSkinGdict[i]))
+        NonS_R_freq.append(str(NonSkinRdict[i]))
 
     # 각 집합마다 파일을 따로 저장.
-    with open(r"pmf_set\Skin_BGR_{}_pmf.csv".format(count + 1), 'w') as f:
-        f.write(",".join(Skin_B_pmf) + "\n")
-        f.write(",".join(Skin_G_pmf) + "\n")
-        f.write(",".join(Skin_R_pmf))
-    with open(r"pmf_set\NonS_BGR_{}_pmf.csv".format(count + 1), 'w') as f:
-        f.write(",".join(NonS_B_pmf) + "\n")
-        f.write(",".join(NonS_G_pmf) + "\n")
-        f.write(",".join(NonS_R_pmf))
+    with open(r"pmf_set\Skin_BGR_{}_freq.csv".format(count + 1), 'w') as f:
+        f.write(",".join(Skin_B_freq) + "\n")
+        f.write(",".join(Skin_G_freq) + "\n")
+        f.write(",".join(Skin_R_freq))
+    with open(r"pmf_set\NonS_BGR_{}_freq.csv".format(count + 1), 'w') as f:
+        f.write(",".join(NonS_B_freq) + "\n")
+        f.write(",".join(NonS_G_freq) + "\n")
+        f.write(",".join(NonS_R_freq))
 
 
+if __name__ == "__main__":
+    count_list = [0, 1, 2, 3, 4]
+    with Pool(8) as p:
+        p.starmap(makeFrequancy, zip(file_list, count_list))
 
 
 
