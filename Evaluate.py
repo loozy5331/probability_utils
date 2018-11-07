@@ -48,7 +48,7 @@ def Test_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood, count):
         row = len(file)  # 행 길이
         cnt+= 1
         if(cnt % 50 == 0):
-            print(count + "에서 " + cnt + "개 했습니다.")
+            print(str(count) + "에서 " + str(cnt) + "개 했습니다.")
         for i in range(row):
             real_val = file.iloc[i, -1]
             R = file.iloc[i, 2]
@@ -94,8 +94,9 @@ def Test_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, count):
         except(Exception):
             continue
         row = len(file)  # 행 길이
+        cnt += 1
         if (cnt % 50 == 0):
-            print(count + "에서 " + cnt + "개 했습니다.")
+            print(str(count) + "에서 " + str(cnt) + "개 했습니다.")
         for i in range(row):
             real_val = file.iloc[i, -1]
             B = file.iloc[i, 0]
@@ -145,8 +146,14 @@ def Test_Gaussian_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood,
         except(Exception):
             continue
         row = len(file)  # 행 길이
+        cnt += 1
+        local_tp = 0
+        local_tn = 0
+        local_fp = 0
+        local_fn = 0
         if (cnt % 50 == 0):
-            print(count + "에서 " + cnt + "개 했습니다.")
+            print(str(count) + "에서 " + str(cnt) + "개 했습니다.")
+
         for i in range(row):
             real_val = file.iloc[i, -1]
             R = file.iloc[i, 2]
@@ -155,16 +162,20 @@ def Test_Gaussian_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood,
 
             # skin 이고, 실제로 skin
             if ((skin_posterior > Nonskin_posterior) and real_val == 1):
-                TP += 1
+                local_tp += 1
             # Nonskin 이고, 실제로 Nonskin
             elif ((skin_posterior < Nonskin_posterior) and real_val != 1):
-                TN += 1
+                local_tn += 1
             # skin 이고, 실제론 Nonskin
             elif ((skin_posterior > Nonskin_posterior) and real_val != 1):
-                FP += 1
+                local_fp += 1
             # Nonskin 이고, 실제로 skin
             else:
-                FN += 1
+                local_fn += 1
+        TP += local_tp
+        TN += local_tn
+        FP += local_fp
+        FN += local_fn
     precision = TP / (TP + FP)
     recall = TP / (TP + FN)
     temp = str(precision) + ", " + str(recall)
@@ -198,8 +209,9 @@ def Test_Gaussian_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, c
         except(Exception):
             continue
         row = len(file)  # 행 길이
+        cnt+=1
         if (cnt % 50 == 0):
-            print(count + "에서 " + cnt + "개 했습니다.")
+            print(str(count) + "에서 " + str(cnt) + "개 했습니다.")
         for i in range(row):
             real_val = file.iloc[i, -1]
             B = file.iloc[i, 0]
