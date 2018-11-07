@@ -31,6 +31,7 @@ def make_pmf(freq):
     return freq
 
 def Test_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood, count):
+    cnt = 0
     PRIOR = 0.5
     TP = 0
     TN = 0
@@ -45,6 +46,9 @@ def Test_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood, count):
         except(Exception):
             continue
         row = len(file)  # 행 길이
+        cnt+= 1
+        if(cnt % 50 == 0):
+            print(count + "에서 " + cnt + "개 했습니다.")
         for i in range(row):
             real_val = file.iloc[i, -1]
             R = file.iloc[i, 2]
@@ -66,10 +70,11 @@ def Test_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood, count):
     precision = TP / (TP + FP)
     recall = TP / (TP + FN)
     temp = str(precision) + ", " + str(recall)
-    with open(r"Evaluate_data\precision_recall_set_{}_R.csv".format(count + 1)) as f:
+    with open(r"Evaluate_data\precision_recall_set_{}_R.csv".format(count + 1), 'w') as f:
         f.write(temp)
 
 def Test_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, count):
+    cnt = 0
     PRIOR = 0.5
     TP = 0
     TN = 0
@@ -89,6 +94,8 @@ def Test_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, count):
         except(Exception):
             continue
         row = len(file)  # 행 길이
+        if (cnt % 50 == 0):
+            print(count + "에서 " + cnt + "개 했습니다.")
         for i in range(row):
             real_val = file.iloc[i, -1]
             B = file.iloc[i, 0]
@@ -111,7 +118,7 @@ def Test_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, count):
     precision = TP / (TP + FP)
     recall = TP / (TP + FN)
     temp = str(precision) + ", " + str(recall)
-    with open(r"Evaluate_data\precision_recall_set_{}.csv".format(count + 1)) as f:
+    with open(r"Evaluate_data\precision_recall_set_{}.csv".format(count + 1), 'w') as f:
         f.write(temp)
 
 def gaussian_distribution(x):
@@ -121,6 +128,7 @@ def gaussian_distribution(x):
     return y
 
 def Test_Gaussian_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood, count):
+    cnt = 1
     PRIOR = 0.5
     TP = 0
     TN = 0
@@ -137,7 +145,8 @@ def Test_Gaussian_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood,
         except(Exception):
             continue
         row = len(file)  # 행 길이
-        print(TP, TN, FP, FN)
+        if (cnt % 50 == 0):
+            print(count + "에서 " + cnt + "개 했습니다.")
         for i in range(row):
             real_val = file.iloc[i, -1]
             R = file.iloc[i, 2]
@@ -159,10 +168,11 @@ def Test_Gaussian_SkinOrNonSkin_R(file_set, skin_likelihood, NonSkin_likelihood,
     precision = TP / (TP + FP)
     recall = TP / (TP + FN)
     temp = str(precision) + ", " + str(recall)
-    with open(r"Evaluate_data\Gaussian_precision_recall_set_{}_R.csv".format(count + 1)) as f:
+    with open(r"Evaluate_data\Gaussian_precision_recall_set_{}_R.csv".format(count + 1), 'w') as f:
         f.write(temp)
 
 def Test_Gaussian_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, count):
+    cnt = 0
     PRIOR = 0.5
     TP = 0
     TN = 0
@@ -188,6 +198,8 @@ def Test_Gaussian_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, c
         except(Exception):
             continue
         row = len(file)  # 행 길이
+        if (cnt % 50 == 0):
+            print(count + "에서 " + cnt + "개 했습니다.")
         for i in range(row):
             real_val = file.iloc[i, -1]
             B = file.iloc[i, 0]
@@ -210,7 +222,7 @@ def Test_Gaussian_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, c
     precision = TP / (TP + FP)
     recall = TP / (TP + FN)
     temp = str(precision) + ", " + str(recall)
-    with open(r"Evaluate_data\Gaussian_precision_recall_set_{}.csv".format(count + 1)) as f:
+    with open(r"Evaluate_data\Gaussian_precision_recall_set_{}.csv".format(count + 1), 'w') as f:
         f.write(temp)
 
 if __name__ == "__main__":
