@@ -26,7 +26,7 @@ for i in range(5):
 def makeFrequancy(file_set, count):
     # for count, file_set in enumerate(file_list):
     # 이미 있으면 패스!
-    if os.path.isfile(os.path.join("pmf_set", r"Skin_BGR_{}_freq.csv".format(count + 1))):
+    if os.path.isfile(os.path.join("pmf_freq", r"Skin_BGR_{}_freq.csv".format(count + 1))):
         print(r"freq_set\Skin_BGR_{}_freq.csv".format(count + 1) + "는 이미 있습니다!")
         return
 
@@ -87,11 +87,11 @@ def makeFrequancy(file_set, count):
         NonS_R_freq.append(str(NonSkinRdict[i]))
 
     # 각 집합마다 파일을 따로 저장.
-    with open(r"pmf_set\Skin_BGR_{}_freq.csv".format(count + 1), 'w') as f:
+    with open(r"pmf_freq\Skin_BGR_{}_freq.csv".format(count + 1), 'w') as f:
         f.write(",".join(Skin_B_freq) + "\n")
         f.write(",".join(Skin_G_freq) + "\n")
         f.write(",".join(Skin_R_freq))
-    with open(r"pmf_set\NonS_BGR_{}_freq.csv".format(count + 1), 'w') as f:
+    with open(r"pmf_freq\NonS_BGR_{}_freq.csv".format(count + 1), 'w') as f:
         f.write(",".join(NonS_B_freq) + "\n")
         f.write(",".join(NonS_G_freq) + "\n")
         f.write(",".join(NonS_R_freq))
