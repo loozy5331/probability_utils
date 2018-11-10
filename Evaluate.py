@@ -4,27 +4,9 @@ import os
 import json
 from multiprocessing import Pool
 
-PRIOR = 0.6
+PRIOR = 0.65
 
 os.chdir(r"C:\Users\time8\Desktop\program\2018.10")
-cur_path = os.getcwd()
-originPics_path = os.path.join(cur_path, "originalPics")
-# total_info.json file
-total_ellip_info = dict()   # total_info.json 불러오기
-with open("total_info.json", "r") as file:
-    total_ellip_info = json.load(file)
-
-# 레이블 처리된 파일들의 "경로 + 이름 + .csv"
-masked_file_list = list()
-for name in total_ellip_info.keys():
-    masked_file_list.append(os.path.join(originPics_path, name) + ".csv")
-
-# 파일을 5분할
-each_file_len = len(masked_file_list) // 5
-# file_list = [first_set[], second_set[], third_set[], fourth_set[], fifth_set[]]
-file_list = []
-for i in range(5):
-    file_list.append(masked_file_list[each_file_len*i:each_file_len*(i+1)])
 
 def listToArray(list_Type_data):
     arr = np.asarray(list_Type_data, dtype=np.float32)
@@ -237,6 +219,26 @@ def Test_Gaussian_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, c
         f.write(temp)
 
 if __name__ == "__main__":
+    # 경로 지정
+    cur_path = os.getcwd()
+    originPics_path = os.path.join(cur_path, "originalPics")
+    # total_info.json file
+    total_ellip_info = dict()  # total_info.json 불러오기
+    with open("total_info.json", "r") as file:
+        total_ellip_info = json.load(file)
+
+    # 레이블 처리된 파일들의 "경로 + 이름 + .csv"
+    masked_file_list = list()
+    for name in total_ellip_info.keys():
+        masked_file_list.append(os.path.join(originPics_path, name) + ".csv")
+
+    # 파일을 5분할
+    each_file_len = len(masked_file_list) // 5
+    # file_list = [first_set[], second_set[], third_set[], fourth_set[], fifth_set[]]
+    file_list = []
+    for i in range(5):
+        file_list.append(masked_file_list[each_file_len * i:each_file_len * (i + 1)])
+
     # Frequency 파일 불러오기
     skin_freq = [pd.read_csv(r"pmf_freq\skin_BGR_{}_freq.csv".format(count + 1), header=None) for count in range(5)]
     Nonskin_freq = [pd.read_csv(r"pmf_freq\NonS_BGR_{}_freq.csv".format(count + 1), header=None) for count in range(5)]
@@ -256,17 +258,17 @@ if __name__ == "__main__":
 
     count_list = list(range(5))
     # R로만 precision, recall을 구함.
-    #with Pool(12) as p:
-    #    p.starmap(Test_SkinOrNonSkin_R, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
+    with Pool(5) as p:
+        p.starmap(Test_SkinOrNonSkin_R, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
 
     # BGR로 precision, recall을 구함.
-    #with Pool(12) as p:
-    #    p.starmap(Test_SkinOrNonSkin, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
+    with Pool(5) as p:
+        p.starmap(Test_SkinOrNonSkin, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
 
     # R만 Guassian fitting 후에 precision, recall을 구함.
-    #with Pool(12) as p:
-    #    p.starmap(Test_Gaussian_SkinOrNonSkin_R, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
+    with Pool(5) as p:
+        p.starmap(Test_Gaussian_SkinOrNonSkin_R, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
 
     # BGR을 Guassin fitting 후에 precision, recall을 구함.
-    #with Pool(12) as p:
-    #    p.starmap(Test_Gaussian_SkinOrNonSkin, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
+    with Pool(5) as p:
+        p.starmap(Test_Gaussian_SkinOrNonSkin, zip(file_list, skin_pmf, Non_skin_pmf, count_list))
