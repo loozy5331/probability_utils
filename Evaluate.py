@@ -4,7 +4,7 @@ import os
 import json
 from multiprocessing import Pool
 
-PRIOR = 0.65
+PRIOR = 0.55
 
 os.chdir(r"C:\Users\time8\Desktop\program\2018.10")
 
@@ -232,7 +232,7 @@ if __name__ == "__main__":
     for name in total_ellip_info.keys():
         masked_file_list.append(os.path.join(originPics_path, name) + ".csv")
 
-    # 파일을 5분할
+    # 이미지 파일들을 5분할
     each_file_len = len(masked_file_list) // 5
     # file_list = [first_set[], second_set[], third_set[], fourth_set[], fifth_set[]]
     file_list = []
