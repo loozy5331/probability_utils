@@ -4,7 +4,7 @@ import os
 import json
 from multiprocessing import Pool
 
-PRIOR = 0.55
+PRIOR = 0.8
 
 os.chdir(r"C:\Users\time8\Desktop\program\2018.10")
 

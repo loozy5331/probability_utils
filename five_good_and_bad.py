@@ -1,23 +1,6 @@
-from utils.Evaluate import *
-import pandas as pd
-import os
 import json
-import cv2
-
-#def extract_five_score(Score_dict):
-
-
 
 if __name__ == "__main__":
-    # Frequency 파일 불러오기
-    skin_freq = [pd.read_csv(r"pmf_freq\skin_BGR_{}_freq.csv".format(count + 1), header=None) for count in range(5)]
-    Nonskin_freq = [pd.read_csv(r"pmf_freq\NonS_BGR_{}_freq.csv".format(count + 1), header=None) for count in range(5)]
-
-    # pmf 만들기
-    jointed_skin_pmf = make_pmf(skin_freq[0] + skin_freq[1] + skin_freq[2] + skin_freq[3] + skin_freq[4])
-    jointed_Non_skin_pmf = make_pmf(Nonskin_freq[0] + Nonskin_freq[1]
-                                    + Nonskin_freq[2] + Nonskin_freq[3] + Nonskin_freq[4])
-
     # key: img_name, value: [score, precision, recall] 인 dict 불러오기
     Normal_Score_dict = dict()
     Gaussian_Score_dict = dict()
@@ -39,6 +22,13 @@ if __name__ == "__main__":
     five_good_score_Gaussian = sorted_by_score_Gaussian[:5]
     five_bad_score_Gaussian = sorted_by_score_Gaussian[-5:]
 
-
+    with open("five_good_score_Normal.csv", "w") as f:
+        f.write(",".join(five_good_score_Normal))
+    with open("five_bad_score_Normal.csv", "w") as f:
+        f.write(",".join(five_bad_score_Normal))
+    with open("five_good_score_Gaussian.csv", "w") as f:
+        f.write(",".join(five_good_score_Gaussian))
+    with open("five_bad_score_Gaussian.csv", "w") as f:
+        f.write(",".join(five_bad_score_Gaussian))
 
 
