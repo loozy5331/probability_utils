@@ -3,7 +3,7 @@ import re
 import json
 
 # 경로 입력.
-os.chdir(r"C:\Users\time8\Desktop\program\2018.10")
+os.chdir(r"..\\")
 path = os.getcwd()
 tpath = os.path.join(path, "FDDB-folds", "FDDB-folds")
 
@@ -47,5 +47,5 @@ def text_preprocessing(tpath):
 
 if __name__ == "__main__":
     path_ellipse_dict = text_preprocessing(tpath)
-    with open(r"utils\total_info.json", "w") as f:
+    with open(r"total_info.json", "w") as f:
         f.write(json.dumps(path_ellipse_dict, indent=2))

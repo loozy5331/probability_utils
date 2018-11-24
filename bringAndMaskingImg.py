@@ -4,7 +4,7 @@ import os
 import pandas as pd
 
 # 이미지가 저장된 폴더 path
-os.chdir(r"C:\Users\time8\Desktop\program\2018.10")
+os.chdir(r"..\\")
 cur_path = os.getcwd()
 originPics_path = os.path.join(cur_path, "originalPics")
 
@@ -81,6 +81,13 @@ def removeAllcsvFile(path):
             os.remove(file_name)
             print(file_name)
 
+def removeAllImage(path):
+    total_path = total_ellip_info.keys()
+    for loc_path in total_path:
+        file_name = os.path.join(path, loc_path) + ".jpg"
+        if os.path.isfile(file_name):
+            os.remove(file_name)
+            print(file_name)
 
 # 타원을 어떤 색으로 정해야 할 것인가 결정
 def guess_Skin_tone():

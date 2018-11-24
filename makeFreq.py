@@ -3,7 +3,7 @@ import os
 from multiprocessing import Pool
 import pandas as pd
 
-os.chdir(r"C:\Users\time8\Desktop\program\2018.10")
+os.chdir(r"..\\")
 cur_path = os.getcwd()
 originPics_path = os.path.join(cur_path, "originalPics")
 # total_info.json file

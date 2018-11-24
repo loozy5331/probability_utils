@@ -1,9 +1,13 @@
 import json
+import os
 
 if __name__ == "__main__":
+    os.chdir(r"..\\")
+
     # key: img_name, value: [score, precision, recall] 인 dict 불러오기
     Normal_Score_dict = dict()
     Gaussian_Score_dict = dict()
+
     with open("Normal_score.json", "r") as file:
         Normal_Score_dict = json.load(file)
 

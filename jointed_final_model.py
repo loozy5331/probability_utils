@@ -72,6 +72,8 @@ def judge_score(img_name, skin_df, Non_skin_df, PRIOR, flag):
 
 
 if __name__ == "__main__":
+
+    os.chdir(r"..\\")
     Normal_Score_dict = dict()
     Gaussian_Score_dict = dict()
 

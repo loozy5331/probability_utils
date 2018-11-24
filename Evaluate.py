@@ -6,8 +6,6 @@ from multiprocessing import Pool
 
 PRIOR = 0.8
 
-os.chdir(r"C:\Users\time8\Desktop\program\2018.10")
-
 def listToArray(list_Type_data):
     arr = np.asarray(list_Type_data, dtype=np.float32)
     return arr
@@ -220,6 +218,7 @@ def Test_Gaussian_SkinOrNonSkin(file_set, skin_likelihood, NonSkin_likelihood, c
 
 if __name__ == "__main__":
     # 경로 지정
+    os.chdir(r"..\\")
     cur_path = os.getcwd()
     originPics_path = os.path.join(cur_path, "originalPics")
     # total_info.json file
